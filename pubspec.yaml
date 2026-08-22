@@ -18,9 +18,11 @@ dependencies:
   # Bibliotecas do PLEASED (Download e IA)
   dio: ^5.0.0
   path_provider: ^2.1.6
-  shared_preferences: ^2.2.0
+  shared_preferences: ^2.2.2
   image_picker: ^1.2.3
   image: ^4.9.1
+  http: ^1.1.0
+
 
 
 dev_dependencies:
