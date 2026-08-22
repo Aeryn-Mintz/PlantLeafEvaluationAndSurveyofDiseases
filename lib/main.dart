@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'crop_selection_screen.dart';
 import 'crop_config.dart';
-import 'package:image_picker/image_picker.dart';
-import 'analysis_screen.dart'; // Importando a tela que acabamos de criar
+import 'analysis_screen.dart';
+import 'model_sync_service.dart';
 
 void main() async {
   // Garante que os componentes do Flutter estejam prontos antes de ler a memória
@@ -49,6 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadMyCrops();
+    
+    // Dispara a checagem em segundo plano sem travar a tela do usuário
+    ModelSyncService.checkAndDownloadModels();
   }
 
   Future<void> _loadMyCrops() async {
@@ -60,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // --- NOVA FUNÇÃO: Puxa a imagem da Câmera ou Galeria ---
+  // --- Função: Puxa a imagem da Câmera ou Galeria ---
   Future<void> _pickImage(ImageSource source, CropConfig crop) async {
     final picker = ImagePicker();
     final XFile? photo = await picker.pickImage(source: source);
@@ -78,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // --- NOVA FUNÇÃO: Mostra o menu de escolha ---
+  // --- Função: Mostra o menu de escolha ---
   void _showPickerOptions(BuildContext context, CropConfig crop) {
     showModalBottomSheet(
       context: context,
@@ -148,7 +153,6 @@ class _HomeScreenState extends State<HomeScreen> {
               subtitle: const Text('Modelo pronto para diagnóstico offline.'),
               trailing: const Icon(Icons.camera_alt),
               onTap: () {
-                // Ao invés de abrir direto, agora chama o nosso menu!
                 _showPickerOptions(context, crop);
               },
             ),
